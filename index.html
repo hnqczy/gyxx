@@ -3,1307 +3,230 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>智能办公导航系统</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>智慧校园统一门户</title>
     <style>
-        /* 基础重置 */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Microsoft YaHei', 'SimSun', 'Segoe UI', sans-serif;
+            font-family: "Segoe UI", "Microsoft Yahei", sans-serif;
         }
 
+        /* 天蓝色科技渐变背景 */
         body {
-            background: linear-gradient(135deg, #f0f5ff 0%, #e6f0ff 100%);
-            color: #333;
             min-height: 100vh;
+            background: linear-gradient(135deg, #1a73e8 0%, #4285f4 35%, #5bacff 70%, #84b6ff 100%);
+            background-attachment: fixed;
+            color: #fff;
+            line-height: 1.6;
+            position: relative;
             overflow-x: hidden;
         }
 
-        /* 办公风格背景 */
-        .office-bg {
+        /* 科技网格底纹 */
+        body::before {
+            content: '';
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: 
-                linear-gradient(rgba(255, 255, 255, 0.98), rgba(240, 245, 255, 0.98)),
-                url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="0 0 120 120"><rect width="120" height="120" fill="%23e6f0ff"/><path d="M20,20 L100,20 L100,100 L20,100 Z" fill="none" stroke="%23b8d4f0" stroke-width="1"/><circle cx="60" cy="60" r="30" fill="none" stroke="%23b8d4f0" stroke-width="1"/></svg>');
-            z-index: -1;
+            background-image:
+                linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px);
+            background-size: 40px 40px;
+            z-index: 0;
+            pointer-events: none;
         }
 
-        /* 主容器 */
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 20px;
-            position: relative;
-        }
-
-        /* 办公风格头部 */
-        .header {
-            background: linear-gradient(135deg, #2c6bc4 0%, #4a8cff 100%);
-            color: white;
-            padding: 30px 35px;
-            margin-bottom: 30px;
-            border-radius: 12px;
-            box-shadow: 0 6px 20px rgba(44, 107, 196, 0.25);
+        /* 顶部导航 */
+        .navbar {
+            background: rgba(255, 255, 255, 0.12);
+            backdrop-filter: blur(12px);
+            height: 65px;
+            border-bottom: 1px solid rgba(255,255,255,0.15);
             display: flex;
-            justify-content: space-between;
             align-items: center;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .header::before {
-            content: '';
-            position: absolute;
+            padding: 0 30px;
+            position: sticky;
             top: 0;
-            left: 0;
-            width: 100%;
-            height: 4px;
-            background: linear-gradient(90deg, #4a8cff, #2c6bc4);
+            z-index: 999;
         }
 
         .logo {
-            display: flex;
-            align-items: center;
-            gap: 20px;
+            height: 38px;
+            margin-right: 14px;
         }
 
-        .logo-icon {
-            width: 70px;
-            height: 70px;
-            background: white;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
-        }
-
-        .logo-icon i {
-            font-size: 36px;
-            color: #2c6bc4;
-            background: linear-gradient(135deg, #2c6bc4, #4a8cff);
-            -webkit-background-clip: text;
-            background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .logo-text h1 {
-            font-size: 32px;
-            font-weight: 700;
-            letter-spacing: 1px;
-            margin-bottom: 8px;
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-
-        .logo-text p {
-            font-size: 16px;
-            opacity: 0.9;
-            font-weight: 300;
-        }
-
-        /* 搜索框 */
-        .search-container {
-            flex: 1;
-            max-width: 400px;
-            margin: 0 40px;
-        }
-
-        .search-box {
-            position: relative;
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 30px;
-            padding: 5px;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-        }
-
-        .search-box input {
-            width: 100%;
-            padding: 12px 20px 12px 50px;
-            background: transparent;
-            border: none;
-            color: white;
-            font-size: 16px;
-            outline: none;
-        }
-
-        .search-box input::placeholder {
-            color: rgba(255, 255, 255, 0.8);
-        }
-
-        .search-box i {
-            position: absolute;
-            left: 20px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: white;
-            font-size: 18px;
-        }
-
-        /* 分类导航 - 横排样式 */
-        .category-nav {
-            background: white;
-            border-radius: 12px;
-            padding: 25px 30px;
-            margin-bottom: 30px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
-            border: 1px solid #e1e8f0;
-        }
-
-        .category-header {
-            display: flex;
-            align-items: center;
-            margin-bottom: 25px;
-            padding-bottom: 15px;
-            border-bottom: 2px solid #f0f5ff;
-        }
-
-        .category-header h2 {
-            color: #2c6bc4;
-            font-size: 22px;
+        .navbar-title {
+            font-size: 21px;
             font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 12px;
+            color: #ffffff;
         }
 
-        .category-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-        }
-
-        .category-item {
-            background: linear-gradient(135deg, #f8faff 0%, #f0f5ff 100%);
-            border-radius: 10px;
-            padding: 25px 20px;
-            border: 2px solid #e1e8f0;
-            cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
-            overflow: hidden;
+        /* 头部 */
+        .hero {
             text-align: center;
-        }
-
-        .category-item:hover {
-            transform: translateY(-5px);
-            border-color: #4a8cff;
-            box-shadow: 0 8px 25px rgba(74, 140, 255, 0.2);
-        }
-
-        .category-item.active {
-            background: linear-gradient(135deg, #2c6bc4 0%, #4a8cff 100%);
-            border-color: #2c6bc4;
-            box-shadow: 0 8px 25px rgba(44, 107, 196, 0.3);
-        }
-
-        .category-item.active .category-icon,
-        .category-item.active .category-name,
-        .category-item.active .category-count {
-            color: white;
-        }
-
-        .category-icon {
-            width: 60px;
-            height: 60px;
-            margin: 0 auto 15px;
-            background: white;
-            border-radius: 15px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 28px;
-            color: #2c6bc4;
-            border: 2px solid #e1e8f0;
-            transition: all 0.3s;
-        }
-
-        .category-item:hover .category-icon {
-            background: #2c6bc4;
-            color: white;
-            border-color: #2c6bc4;
-            transform: scale(1.1);
-        }
-
-        .category-name {
-            font-size: 18px;
-            font-weight: 600;
-            color: #2c6bc4;
-            margin-bottom: 8px;
-            transition: color 0.3s;
-        }
-
-        .category-desc {
-            font-size: 14px;
-            color: #666;
-            margin-bottom: 12px;
-            line-height: 1.4;
-        }
-
-        .category-count {
-            display: inline-block;
-            background: rgba(44, 107, 196, 0.1);
-            color: #2c6bc4;
-            padding: 4px 12px;
-            border-radius: 15px;
-            font-size: 12px;
-            font-weight: 600;
-            border: 1px solid rgba(44, 107, 196, 0.2);
-        }
-
-        .category-item.active .category-count {
-            background: rgba(255, 255, 255, 0.2);
-            border-color: rgba(255, 255, 255, 0.3);
-        }
-
-        /* 主内容区 */
-        .main-content {
-            background: white;
-            border-radius: 12px;
-            padding: 30px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
-            border: 1px solid #e1e8f0;
-        }
-
-        .content-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 30px;
-            padding-bottom: 20px;
-            border-bottom: 2px solid #f0f5ff;
-        }
-
-        .content-header h3 {
-            color: #2c6bc4;
-            font-size: 20px;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .website-count {
-            background: linear-gradient(135deg, #2c6bc4, #4a8cff);
-            color: white;
-            padding: 6px 15px;
-            border-radius: 20px;
-            font-size: 14px;
-            font-weight: 600;
-        }
-
-        /* 网站网格 */
-        .websites-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-            gap: 25px;
-        }
-
-        .website-card {
-            background: white;
-            border-radius: 10px;
-            padding: 25px;
-            border: 2px solid #f0f5ff;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            padding: 45px 20px 30px;
             position: relative;
-            overflow: hidden;
+            z-index: 1;
         }
 
-        .website-card:hover {
-            transform: translateY(-8px);
-            border-color: #4a8cff;
-            box-shadow: 0 12px 30px rgba(74, 140, 255, 0.15);
+        .hero h1 {
+            font-size: 32px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            text-shadow: 0 1px 6px rgba(0,0,0,0.15);
         }
 
-        .website-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 5px;
-            height: 100%;
-            background: linear-gradient(to bottom, #2c6bc4, #4a8cff);
+        .hero p {
+            font-size: 15px;
+            color: rgba(255,255,255,0.9);
+            max-width: 600px;
+            margin: 0 auto;
         }
 
-        .card-header {
+        /* 布局 */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 18px;
+        }
+
+        /* 卡片：图标左 + 文字右 + 扁平等 */
+        .card {
+            background: rgba(255, 255, 255, 0.18);
+            backdrop-filter: blur(10px);
+            border-radius: 14px;
+            height: 80px; /* 卡片变矮 */
             display: flex;
             align-items: center;
-            margin-bottom: 20px;
+            padding: 0 22px;
+            gap: 18px;
+            text-decoration: none;
+            color: #ffffff;
+            border: 1px solid rgba(255, 255, 255, 0.22);
+            transition: all 0.28s ease;
         }
 
-        .favicon {
-            width: 50px;
-            height: 50px;
-            border-radius: 12px;
-            margin-right: 20px;
+        .card:hover {
+            transform: translateY(-4px);
+            background: rgba(255, 255, 255, 0.28);
+            border-color: rgba(255, 255, 255, 0.5);
+            box-shadow: 0 8px 20px rgba(66, 133, 244, 0.25);
+        }
+
+        /* 左侧图标 */
+        .card-icon {
+            width: 46px;
+            height: 46px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
             display: flex;
             align-items: center;
             justify-content: center;
-            background: linear-gradient(135deg, #f0f5ff, #e6f0ff);
-            font-size: 24px;
-            color: #2c6bc4;
-            border: 2px solid #e1e8f0;
+            font-size: 22px;
             flex-shrink: 0;
         }
 
-        .website-info h3 {
-            font-size: 20px;
-            font-weight: 600;
-            margin-bottom: 8px;
-            color: #2c6bc4;
-            cursor: pointer;
-            transition: color 0.3s;
-        }
-
-        .website-info h3:hover {
-            color: #4a8cff;
-            text-decoration: underline;
-        }
-
-        .website-url {
-            color: #666;
+        /* 右侧文字 */
+        .card-title {
             font-size: 15px;
-            text-decoration: none;
-            transition: all 0.3s;
-            display: inline-block;
-            cursor: pointer;
-            position: relative;
-            padding: 2px 0;
+            font-weight: 500;
+            text-align: left;
+            flex: 1;
         }
 
-        .website-url:hover {
-            color: #2c6bc4;
-            transform: translateY(-2px);
-        }
-
-        .website-url::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 0;
-            height: 2px;
-            background: linear-gradient(90deg, #2c6bc4, #4a8cff);
-            transition: width 0.3s;
-        }
-
-        .website-url:hover::after {
-            width: 100%;
-        }
-
-        .card-body {
-            margin-bottom: 20px;
-            font-size: 15px;
-            color: #555;
-            line-height: 1.6;
-            padding: 15px 0;
-            border-top: 1px solid #f0f5ff;
-            border-bottom: 1px solid #f0f5ff;
-        }
-
-        .card-footer {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-top: 15px;
-        }
-
-        .category-tag {
-            background: linear-gradient(135deg, #f0f5ff, #e6f0ff);
-            color: #2c6bc4;
-            padding: 6px 15px;
-            border-radius: 20px;
-            font-size: 13px;
-            font-weight: 600;
-            border: 1px solid #e1e8f0;
-        }
-
-        .card-actions {
-            display: flex;
-            gap: 10px;
-        }
-
-        .card-actions button {
-            width: 36px;
-            height: 36px;
-            border-radius: 8px;
-            border: 1px solid #e1e8f0;
-            background: white;
-            color: #666;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.3s;
-            font-size: 15px;
-        }
-
-        .card-actions button:hover {
-            background: linear-gradient(135deg, #2c6bc4, #4a8cff);
-            color: white;
-            border-color: #2c6bc4;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 10px rgba(44, 107, 196, 0.2);
-        }
-
-        /* 快速添加区域 */
-        .quick-add {
-            background: linear-gradient(135deg, #f8faff 0%, #f0f5ff 100%);
-            border-radius: 12px;
-            padding: 30px;
-            margin-top: 40px;
-            border: 2px solid #e1e8f0;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-        }
-
-        .quick-add h3 {
-            color: #2c6bc4;
-            font-size: 20px;
-            margin-bottom: 25px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .add-form {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-            align-items: end;
-        }
-
-        .form-group {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-
-        .form-group label {
-            font-size: 14px;
-            color: #555;
-            font-weight: 600;
-        }
-
-        .form-group input,
-        .form-group select {
-            background: white;
-            border: 2px solid #e1e8f0;
-            border-radius: 8px;
-            padding: 12px 15px;
-            color: #333;
-            outline: none;
-            transition: all 0.3s;
-            font-size: 15px;
-        }
-
-        .form-group input:focus,
-        .form-group select:focus {
-            border-color: #2c6bc4;
-            box-shadow: 0 0 0 3px rgba(44, 107, 196, 0.1);
-        }
-
-        .add-btn {
-            background: linear-gradient(135deg, #2c6bc4 0%, #4a8cff 100%);
-            border: none;
-            color: white;
-            padding: 14px 25px;
-            border-radius: 8px;
-            font-weight: 600;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            transition: all 0.3s;
-            font-size: 15px;
-            height: 48px;
-        }
-
-        .add-btn:hover {
-            background: linear-gradient(135deg, #1a5fb4 0%, #2c6bc4 100%);
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(44, 107, 196, 0.3);
-        }
-
-        /* 通知 */
-        .notification {
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            background: linear-gradient(135deg, #2c6bc4, #4a8cff);
-            border-radius: 10px;
-            padding: 18px 30px;
-            color: white;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            z-index: 1000;
-            transform: translateY(100px);
-            opacity: 0;
-            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-            border: 2px solid rgba(255, 255, 255, 0.3);
-            box-shadow: 0 8px 25px rgba(44, 107, 196, 0.3);
-        }
-
-        .notification.show {
-            transform: translateY(0);
-            opacity: 1;
-        }
-
-        /* 响应式设计 */
-        @media (max-width: 1200px) {
-            .category-grid {
-                grid-template-columns: repeat(3, 1fr);
-            }
-        }
-
-        @media (max-width: 992px) {
-            .header {
-                flex-direction: column;
-                gap: 25px;
-                padding: 25px;
-            }
-            
-            .search-container {
-                max-width: 100%;
-                margin: 0;
-            }
-            
-            .category-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-            
-            .websites-grid {
-                grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            }
-            
-            .add-form {
-                grid-template-columns: 1fr;
-            }
-        }
-
+        /* 移动端 */
         @media (max-width: 768px) {
-            .container {
-                padding: 15px;
+            .hero h1 {
+                font-size: 24px;
             }
-            
-            .category-grid {
+            .grid {
                 grid-template-columns: 1fr;
+                gap: 14px;
             }
-            
-            .websites-grid {
-                grid-template-columns: 1fr;
+            .card {
+                height: 72px;
             }
-            
-            .logo-text h1 {
-                font-size: 26px;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .header {
-                padding: 20px;
-            }
-            
-            .logo {
-                gap: 15px;
-            }
-            
-            .logo-icon {
-                width: 50px;
-                height: 50px;
-            }
-            
-            .logo-icon i {
-                font-size: 28px;
-            }
-            
-            .category-nav,
-            .main-content,
-            .quick-add {
-                padding: 20px;
-            }
-        }
-
-        /* 链接样式 */
-        .link-area {
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .link-area:hover {
-            color: #2c6bc4;
-            text-decoration: underline;
-        }
-
-        /* 加载动画 */
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .website-card {
-            animation: fadeIn 0.5s ease-out;
-        }
-
-        .category-item {
-            animation: fadeIn 0.5s ease-out;
         }
     </style>
+    <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
+
 <body>
-    <!-- 办公风格背景 -->
-    <div class="office-bg"></div>
-    
+    <!-- 导航 -->
+    <div class="navbar">
+        <img src="https://via.placeholder.com/40" alt="LOGO" class="logo">
+        <div class="navbar-title">智慧校园统一门户</div>
+    </div>
+
+    <!-- 标题 -->
+    <div class="hero">
+        <h1>一站式校园综合服务平台</h1>
+        <p>集成管理、服务、宣传、监控、数据于一体，高效、安全、便捷</p>
+    </div>
+
+    <!-- 功能卡片 -->
     <div class="container">
-        <!-- 办公风格头部 -->
-        <header class="header">
-            <div class="logo">
-                <div class="logo-icon">
-                    <i class="fas fa-briefcase"></i>
-                </div>
-                <div class="logo-text">
-                    <h1>智能办公导航系统</h1>
-                    <p>高效办公 · 智能管理 · 便捷访问</p>
-                </div>
-            </div>
-            
-            <div class="search-container">
-                <div class="search-box">
-                    <i class="fas fa-search"></i>
-                    <input type="text" id="search-input" placeholder="搜索办公网站或应用...">
-                </div>
-            </div>
-        </header>
-        
-        <!-- 分类导航 - 横排显示 -->
-        <div class="category-nav">
-            <div class="category-header">
-                <h2><i class="fas fa-th-large"></i> 办公网站分类</h2>
-            </div>
-            <div class="category-grid" id="categories-grid">
-                <!-- 分类项将由JS动态生成 -->
-            </div>
-        </div>
-        
-        <!-- 主内容区 -->
-        <div class="main-content">
-            <div class="content-header">
-                <h3><i class="fas fa-globe"></i> 办公网站</h3>
-                <div class="website-count" id="website-count">0个网站</div>
-            </div>
-            <div class="websites-grid" id="websites-grid">
-                <!-- 网站卡片将由JS动态生成 -->
-            </div>
-        </div>
-        
-        <!-- 快速添加区域 -->
-        <div class="quick-add">
-            <h3><i class="fas fa-plus-circle"></i> 添加办公网站</h3>
-            <div class="add-form">
-                <div class="form-group">
-                    <label for="site-name">网站名称</label>
-                    <input type="text" id="site-name" placeholder="例如：OA办公系统">
-                </div>
-                <div class="form-group">
-                    <label for="site-url">网站地址</label>
-                    <input type="url" id="site-url" placeholder="https://oa.example.com">
-                </div>
-                <div class="form-group">
-                    <label for="site-category">网站分类</label>
-                    <select id="site-category">
-                        <!-- 分类选项将由JS动态生成 -->
-                    </select>
-                </div>
-                <button class="add-btn" id="add-site">
-                    <i class="fas fa-plus"></i>
-                    添加网站
-                </button>
-            </div>
+        <div class="grid">
+            <a href="media.html" class="card">
+                <div class="card-icon"><i class="fas fa-bullhorn"></i></div>
+                <div class="card-title">媒体宣传系统</div>
+            </a>
+            <a href="dispatch.html" class="card">
+                <div class="card-icon"><i class="fas fa-city"></i></div>
+                <div class="card-title">调度中心系统</div>
+            </a>
+            <a href="service.html" class="card">
+                <div class="card-icon"><i class="fas fa-handshake"></i></div>
+                <div class="card-title">群众服务系统</div>
+            </a>
+            <a href="grid.html" class="card">
+                <div class="card-icon"><i class="fas fa-layer-group"></i></div>
+                <div class="card-title">网格治理系统</div>
+            </a>
+            <a href="data.html" class="card">
+                <div class="card-icon"><i class="fas fa-chart-bar"></i></div>
+                <div class="card-title">数据管理系统</div>
+            </a>
+            <a href="screen.html" class="card">
+                <div class="card-icon"><i class="fas fa-desktop"></i></div>
+                <div class="card-title">数据展示大屏</div>
+            </a>
+            <a href="monitor.html" class="card">
+                <div class="card-icon"><i class="fas fa-video"></i></div>
+                <div class="card-title">天翼监控系统</div>
+            </a>
+            <a href="broadcast.html" class="card">
+                <div class="card-icon"><i class="fas fa-volume-high"></i></div>
+                <div class="card-title">天翼大喇叭</div>
+            </a>
+            <a href="kqkh.html" class="card">
+                <div class="card-icon"><i class="fas fa-fire-flame-curved"></i></div>
+                <div class="card-title">考勤考核系统</div>
+            </a>
+            <a href="door.html" class="card">
+                <div class="card-icon"><i class="fas fa-door-closed"></i></div>
+                <div class="card-title">天翼门磁系统</div>
+            </a>
+            <a href="jiaowu.html" class="card">
+                <div class="card-icon"><i class="fas fa-book"></i></div>
+                <div class="card-title">教务管理系统</div>
+            </a>
+            <a href="config.html" class="card">
+                <div class="card-icon"><i class="fas fa-sliders"></i></div>
+                <div class="card-title">平台配置中心</div>
+            </a>
         </div>
     </div>
-    
-    <!-- 通知 -->
-    <div class="notification" id="notification">
-        <i class="fas fa-check-circle"></i>
-        <span id="notification-text">操作成功</span>
-    </div>
-
-    <script>
-        // 数据存储键名
-        const STORAGE_KEY = 'office_navigation_data';
-        const CATEGORIES_KEY = 'office_navigation_categories';
-
-        // 默认分类配置
-        const defaultCategories = [
-            {
-                id: 1,
-                name: "业务系统",
-                icon: "fas fa-cogs",
-                desc: "内部业务管理系统",
-                count: 0,
-                color: "#2c6bc4"
-            },
-            {
-                id: 2,
-                name: "智慧校园",
-                icon: "fas fa-graduation-cap",
-                desc: "校园信息化管理系统",
-                count: 0,
-                color: "#4a8cff"
-            },
-            {
-                id: 3,
-                name: "政务链接",
-                icon: "fas fa-landmark",
-                desc: "政府政务服务平台",
-                count: 0,
-                color: "#2c6bc4"
-            },
-            {
-                id: 4,
-                name: "智慧办公",
-                icon: "fas fa-laptop-house",
-                desc: "智能办公协作平台",
-                count: 0,
-                color: "#4a8cff"
-            },
-            {
-                id: 6,
-                name: "系统平台",
-                icon: "fa-solid fa-layer-group",
-                desc: "系统平台",
-                count: 0,
-                color: "#2c6bc4"
-            }
-        ,
-            {
-                id: 5,
-                name: "友情链接",
-                icon: "fas fa-link",
-                desc: "合作及相关链接",
-                count: 0,
-                color: "#2c6bc4"
-            }
-        ];
-
-        // 默认网站数据
-        const defaultWebsites = [
-            // 业务系统
-            { id: 1, name: "OA办公系统", url: "https://oa.example.com", category: "业务系统", description: "企业综合办公自动化系统", icon: "fas fa-file-alt", frequency: 5 },
-            { id: 2, name: "ERP管理系统", url: "https://erp.example.com", category: "业务系统", description: "企业资源计划管理系统", icon: "fas fa-chart-line", frequency: 4 },
-            { id: 3, name: "CRM客户系统", url: "https://crm.example.com", category: "业务系统", description: "客户关系管理系统", icon: "fas fa-users", frequency: 3 },
-            { id: 4, name: "HR人事系统", url: "https://hr.example.com", category: "业务系统", description: "人力资源管理系统", icon: "fas fa-user-tie", frequency: 4 },
-            { id: 5, name: "宪法卫士活动", url: "https://qspfw.moe.gov.cn/index.html", category: "系统平台", description: "教育部全国青少年普法网", icon: "fa-solid fa-earth-americas", frequency: 3 },
-            { id: 5, name: "中职学校管理信息系统平台", url: "https://mves.moe.edu.cn/login", category: "系统平台", description: "全国中等职业学校管理信息系统工作台", icon: "fa-solid fa-earth-americas", frequency: 3 },
-            { id: 6, name: "中职学校管理信息系统2025", url: "https://zzxx.hnedu.cn/msc24/login.html", category: "系统平台", description: "全国中等职业学校管理信息系统", icon: "fa-solid fa-earth-americas", frequency: 3 },
-            { id: 15, name: "视频资源联网平台", url: "http://172.20.237.206/#/", category:"业务系统", description: "视频资源联网平台", icon: "fas fa-shield-alt", frequency: 3 },
-            
-           // 智慧校园
-            { id: 6, name: "统一信息门户（内网）", url: "http://10.10.7.9/m/moa/login", category: "智慧校园", description: "株洲市工业中等专业学校SCMP@智慧校园统一信息门户（内网）", icon: "fa-solid fa-link", frequency: 4 },
-            { id: 6, name: "湖南汽车职大", url: "https://www.hnae.edu.cn/", category: "智慧校园", description: "湖南汽车工程职业大学", icon: "fa-solid fa-school", frequency: 6 },
-            { id: 6, name: "工业学校", url: "https://zzb.hnae.edu.cn/", category: "智慧校园", description: "工业中专（职工大学）（基础教育学院）", icon: "fa-solid fa-school", frequency: 6 },            { id: 6, name: "统一信息门户（外网）", url: "http://gyxx.hnqczy.com/m/moa/login", category: "智慧校园", description: "株洲市工业中等专业学校SCMP@智慧校园统一信息门户（外网）", icon: "fas fa-book-open", frequency: 4 },
-            { id: 7, name: "学工管理系统", url: "https://student.example.com", category: "智慧校园", description: "学生工作管理系统", icon: "fas fa-user-graduate", frequency: 3 },
-            { id: 7, name: "能源管理系统（内网）", url: "http://10.10.2.168:8080/admin", category: "业务系统", description: "能源管理系统（内网）", icon: "fa-solid fa-lightbulb", frequency: 3 },
-            { id: 8, name: "科研管理系统", url: "https://research.example.com", category: "智慧校园", description: "科研项目与成果管理系统", icon: "fas fa-flask", frequency: 2 },
-            { id: 9, name: "图书馆系统", url: "https://library.example.com", category: "智慧校园", description: "数字图书馆管理系统", icon: "fas fa-book", frequency: 3 },
-            { id: 10, name: "校内文件平台", url: "http://10.10.4.34/", category: "智慧校园", description: "学校文件发布平台", icon: "fa-solid fa-book", frequency: 5 },
-            
-            // 政务链接
-            { id: 11, name: "湖南政务服务网", url: "https://zwfw-new.hunan.gov.cn/", category: "政务链接", description: "湖南省政务服务和大数据中心", icon: "fas fa-globe", frequency: 4 },
-            { id: 12, name: "国家税务总局", url: "https://etax.hunan.chinatax.gov.cn:8443/", category: "政务链接", description: "税务申报与管理系统", icon: "fas fa-file-invoice-dollar", frequency: 3 },
-            { id: 13, name: "人力资源和社会保障", url: "https://ggfw.rst.hunan.gov.cn/hrss-pw-ui-hunan/#", category: "政务链接", description: "人社业务办理平台", icon: "fas fa-handshake", frequency: 2 },
-            { id: 14, name: "湘信服务", url: "https://credit.fgw.hunan.gov.cn/hnweb/", category: "政务链接", description: "“信用湖南”一体化平台", icon: "fas fa-balance-scale", frequency: 2 },
-            { id: 15, name: "公安服务平台", url: "https://fwpt.hnga.gov.cn/", category: "政务链接", description: "湖南公安服务平台", icon: "fas fa-shield-alt", frequency: 3 },
-            
-            // 智慧办公
-            { id: 16, name: "腾讯会议", url: "https://meeting.tencent.com", category: "智慧办公", description: "在线视频会议平台", icon: "fas fa-video", frequency: 5 },
-            { id: 17, name: "钉钉办公", url: "https://dingtalk.com", category: "智慧办公", description: "智能移动办公平台", icon: "fas fa-mobile-alt", frequency: 5 },
-            { id: 18, name: "企业微信", url: "https://work.weixin.qq.com", category: "智慧办公", description: "企业通讯与办公工具", icon: "fas fa-comments", frequency: 4 },
-            { id: 19, name: "飞书文档", url: "https://feishu.cn", category: "智慧办公", description: "在线协作办公套件", icon: "fas fa-file-word", frequency: 3 },
-            { id: 20, name: "WPS云办公", url: "https://wps.cn", category: "智慧办公", description: "云端办公软件套件", icon: "fas fa-cloud", frequency: 4 },
-            
-            // 友情链接
-            { id: 21, name: "合作伙伴A", url: "https://partner-a.com", category: "友情链接", description: "战略合作伙伴网站", icon: "fas fa-handshake", frequency: 2 },
-            { id: 22, name: "行业资讯", url: "https://news.example.com", category: "友情链接", description: "行业新闻与资讯平台", icon: "fas fa-newspaper", frequency: 3 },
-            { id: 23, name: "字体图标中文Icon", url: "https://fontawesome.com/", category: "友情链接", description: "字体图标中文Icon", icon: "fa-solid fa-earth-americas", frequency: 5 },
-            { id: 24, name: "DeepSeek", url: "https://www.deepseek.com/", category: "友情链接", description: "DeepSeek - 探索未至之境", icon: "fa-solid fa-globe-pointer", frequency: 4 },
-            { id: 24, name: "班主任考勤", url: "https://cli.im/", category: "智慧办公", description: "草料二维码", icon: "fa-solid fa-calendar-days", frequency: 4 },
-            { id: 24, name: "百度搜索", url: "https://www.baidu.com/", category: "友情链接", description: "百度一下，你就知道", icon: "fa-solid fa-globe-pointer", frequency: 4 },
-            { id: 25, name: "客户服务", url: "https://service.example.com", category: "友情链接", description: "客户服务与支持中心", icon: "fas fa-headset", frequency: 3 }
-        ];
-
-        // 全局变量
-        let websites = [];
-        let categories = [];
-        let currentCategory = "全部";
-        let searchQuery = "";
-
-        // 数据存储函数
-        const DataStorage = {
-            // 保存网站数据
-            saveWebsites: function() {
-                try {
-                    localStorage.setItem(STORAGE_KEY, JSON.stringify(websites));
-                    console.log('网站数据已保存到本地存储');
-                } catch (e) {
-                    console.error('保存网站数据失败:', e);
-                    this.showNotification('保存数据失败，浏览器可能不支持本地存储', 'error');
-                }
-            },
-
-            // 保存分类数据
-            saveCategories: function() {
-                try {
-                    localStorage.setItem(CATEGORIES_KEY, JSON.stringify(categories));
-                    console.log('分类数据已保存到本地存储');
-                } catch (e) {
-                    console.error('保存分类数据失败:', e);
-                }
-            },
-
-            // 加载所有数据
-            loadAllData: function() {
-                // 加载网站数据
-                try {
-                    const storedWebsites = localStorage.getItem(STORAGE_KEY);
-                    if (storedWebsites) {
-                        websites = JSON.parse(storedWebsites);
-                        console.log('从本地存储加载网站数据成功');
-                    } else {
-                        websites = [...defaultWebsites];
-                        this.saveWebsites();
-                        console.log('使用默认网站数据并保存');
-                    }
-                } catch (e) {
-                    console.error('加载网站数据失败，使用默认数据:', e);
-                    websites = [...defaultWebsites];
-                }
-
-                // 加载分类数据
-                try {
-                    const storedCategories = localStorage.getItem(CATEGORIES_KEY);
-                    if (storedCategories) {
-                        categories = JSON.parse(storedCategories);
-                        console.log('从本地存储加载分类数据成功');
-                    } else {
-                        categories = [...defaultCategories];
-                        this.saveCategories();
-                        console.log('使用默认分类数据并保存');
-                    }
-                } catch (e) {
-                    console.error('加载分类数据失败，使用默认数据:', e);
-                    categories = [...defaultCategories];
-                }
-            },
-
-            // 显示通知
-            showNotification: function(message, type = 'success') {
-                const notification = document.getElementById('notification');
-                const notificationText = document.getElementById('notification-text');
-                
-                notificationText.textContent = message;
-                
-                if (type === 'error') {
-                    notification.style.background = 'linear-gradient(135deg, #dc3545, #c82333)';
-                } else if (type === 'info') {
-                    notification.style.background = 'linear-gradient(135deg, #17a2b8, #138496)';
-                } else {
-                    notification.style.background = 'linear-gradient(135deg, #2c6bc4, #4a8cff)';
-                }
-                
-                notification.classList.add('show');
-                
-                setTimeout(() => {
-                    notification.classList.remove('show');
-                }, 3000);
-            }
-        };
-
-        // 初始化函数
-        function init() {
-            // 加载数据
-            DataStorage.loadAllData();
-            
-            // 更新分类计数
-            updateCategoryCounts();
-            
-            // 加载分类
-            loadCategories();
-            
-            // 加载网站
-            loadWebsites();
-            
-            // 初始化事件监听器
-            initEventListeners();
-        }
-
-        // 更新分类计数
-        function updateCategoryCounts() {
-            // 重置所有分类计数
-            categories.forEach(category => {
-                category.count = 0;
-            });
-            
-            // 计算每个分类的网站数量
-            websites.forEach(website => {
-                const category = categories.find(c => c.name === website.category);
-                if (category) {
-                    category.count++;
-                }
-            });
-        }
-
-        // 加载分类 - 横排显示
-        function loadCategories() {
-            const categoriesGrid = document.getElementById('categories-grid');
-            categoriesGrid.innerHTML = '';
-            
-            // 添加"全部"分类
-            const allCategory = {
-                id: 0,
-                name: "全部",
-                icon: "fas fa-th",
-                desc: "显示所有办公网站",
-                count: websites.length,
-                color: "#4a8cff"
-            };
-            
-            const allCategories = [allCategory, ...categories];
-            
-            // 创建分类项
-            allCategories.forEach(category => {
-                const categoryElement = document.createElement('div');
-                categoryElement.className = `category-item ${category.name === currentCategory ? 'active' : ''}`;
-                categoryElement.setAttribute('data-category', category.name);
-                categoryElement.innerHTML = `
-                    <div class="category-icon">
-                        <i class="${category.icon}"></i>
-                    </div>
-                    <div class="category-name">${category.name}</div>
-                    <div class="category-desc">${category.desc}</div>
-                    <div class="category-count">${category.count}个网站</div>
-                `;
-                
-                categoryElement.addEventListener('click', () => {
-                    document.querySelectorAll('.category-item').forEach(cat => cat.classList.remove('active'));
-                    categoryElement.classList.add('active');
-                    currentCategory = category.name;
-                    loadWebsites();
-                });
-                
-                categoriesGrid.appendChild(categoryElement);
-            });
-            
-            // 更新分类选择器
-            updateCategorySelector();
-            
-            // 保存更新后的分类数据
-            DataStorage.saveCategories();
-        }
-
-        // 更新分类选择器
-        function updateCategorySelector() {
-            const categorySelect = document.getElementById('site-category');
-            categorySelect.innerHTML = '';
-            
-            categories.forEach(category => {
-                const option = document.createElement('option');
-                option.value = category.name;
-                option.textContent = category.name;
-                categorySelect.appendChild(option);
-            });
-        }
-
-        // 加载网站
-        function loadWebsites() {
-            const websitesGrid = document.getElementById('websites-grid');
-            const websiteCountElement = document.getElementById('website-count');
-            
-            // 清空当前内容
-            websitesGrid.innerHTML = '';
-            
-            // 过滤网站
-            let filteredWebsites = websites;
-            
-            // 按分类筛选
-            if (currentCategory !== '全部') {
-                filteredWebsites = websites.filter(website => website.category === currentCategory);
-            }
-            
-            // 按搜索词筛选
-            if (searchQuery) {
-                const query = searchQuery.toLowerCase();
-                filteredWebsites = filteredWebsites.filter(website => 
-                    website.name.toLowerCase().includes(query) || 
-                    website.description.toLowerCase().includes(query) ||
-                    website.url.toLowerCase().includes(query)
-                );
-            }
-            
-            // 按使用频率排序
-            filteredWebsites.sort((a, b) => b.frequency - a.frequency);
-            
-            // 更新网站数量
-            websiteCountElement.textContent = `${filteredWebsites.length}个网站`;
-            
-            // 创建网站卡片
-            filteredWebsites.forEach(website => {
-                const websiteElement = document.createElement('div');
-                websiteElement.className = 'website-card';
-                websiteElement.innerHTML = `
-                    <div class="card-header">
-                        <div class="favicon">
-                            <i class="${website.icon || getOfficeWebsiteIcon(website.name, website.category)}"></i>
-                        </div>
-                        <div class="website-info">
-                            <h3 class="link-area" data-url="${website.url}" onclick="visitWebsite(${website.id}, '${website.url}')">
-                                ${website.name}
-                            </h3>
-                            <a href="${website.url}" target="_blank" class="website-url link-area" 
-                               onclick="visitWebsite(${website.id}, '${website.url}')">
-                                ${website.url}
-                            </a>
-                        </div>
-                    </div>
-                    <div class="card-body">
-                        ${website.description}
-                    </div>
-                    <div class="card-footer">
-                        <span class="category-tag">${website.category}</span>
-                        <div class="card-actions">
-                            <button class="edit-btn" data-id="${website.id}" title="编辑网站" onclick="editWebsite(${website.id})">
-                                <i class="fas fa-edit"></i>
-                            </button>
-                            <button class="delete-btn" data-id="${website.id}" title="删除网站" onclick="deleteWebsite(${website.id})">
-                                <i class="fas fa-trash"></i>
-                            </button>
-                        </div>
-                    </div>
-                `;
-                
-                websitesGrid.appendChild(websiteElement);
-            });
-            
-            // 保存网站数据
-            DataStorage.saveWebsites();
-        }
-
-        // 访问网站（增加使用频率）
-        function visitWebsite(id, url) {
-            const website = websites.find(w => w.id === id);
-            if (website) {
-                website.frequency++;
-                DataStorage.saveWebsites();
-                
-                // 如果当前显示的是"全部"或该网站所属分类，重新加载以更新排序
-                if (currentCategory === '全部' || currentCategory === website.category) {
-                    loadWebsites();
-                }
-            }
-            
-            // 在新标签页打开网站
-            window.open(url, '_blank');
-        }
-
-        // 编辑网站
-        function editWebsite(id) {
-            const website = websites.find(w => w.id === id);
-            if (!website) return;
-            
-            const newName = prompt('请输入新的网站名称：', website.name);
-            if (newName !== null) {
-                const newUrl = prompt('请输入新的网站地址：', website.url);
-                if (newUrl !== null) {
-                    const newCategory = prompt('请选择新的分类（业务系统/智慧校园/政务链接/智慧办公/友情链接）：', website.category);
-                    if (newCategory !== null && defaultCategories.some(c => c.name === newCategory)) {
-                        // 更新网站信息
-                        website.name = newName.trim();
-                        website.url = newUrl.trim();
-                        website.category = newCategory.trim();
-                        
-                        // 更新分类计数
-                        updateCategoryCounts();
-                        
-                        // 保存数据并刷新界面
-                        DataStorage.saveWebsites();
-                        loadCategories();
-                        loadWebsites();
-                        
-                        DataStorage.showNotification(`已更新网站：${website.name}`);
-                    }
-                }
-            }
-        }
-
-        // 删除网站
-        function deleteWebsite(id) {
-            const website = websites.find(w => w.id === id);
-            if (!website) return;
-            
-            if (confirm(`确定要删除网站 "${website.name}" 吗？`)) {
-                // 从数组中删除
-                const index = websites.findIndex(w => w.id === id);
-                websites.splice(index, 1);
-                
-                // 更新分类计数
-                updateCategoryCounts();
-                
-                // 保存数据并刷新界面
-                DataStorage.saveWebsites();
-                loadCategories();
-                loadWebsites();
-                
-                DataStorage.showNotification(`已删除网站：${website.name}`);
-            }
-        }
-
-        // 获取办公网站图标
-        function getOfficeWebsiteIcon(name, category) {
-            const nameLower = name.toLowerCase();
-            const categoryLower = category.toLowerCase();
-            
-            // 根据分类选择图标
-            if (categoryLower.includes('业务系统')) {
-                if (nameLower.includes('oa')) return 'fas fa-file-alt';
-                if (nameLower.includes('erp')) return 'fas fa-chart-line';
-                if (nameLower.includes('crm')) return 'fas fa-users';
-                if (nameLower.includes('hr')) return 'fas fa-user-tie';
-                if (nameLower.includes('财务')) return 'fas fa-money-bill-wave';
-                return 'fas fa-cogs';
-            }
-            
-            if (categoryLower.includes('智慧校园')) {
-                if (nameLower.includes('教务')) return 'fas fa-book-open';
-                if (nameLower.includes('学工')) return 'fas fa-user-graduate';
-                if (nameLower.includes('科研')) return 'fas fa-flask';
-                if (nameLower.includes('图书')) return 'fas fa-book';
-                if (nameLower.includes('一卡通')) return 'fas fa-credit-card';
-                return 'fas fa-graduation-cap';
-            }
-            
-            if (categoryLower.includes('政务链接')) {
-                if (nameLower.includes('税务')) return 'fas fa-file-invoice-dollar';
-                if (nameLower.includes('人社')) return 'fas fa-handshake';
-                if (nameLower.includes('市场')) return 'fas fa-balance-scale';
-                if (nameLower.includes('公安')) return 'fas fa-shield-alt';
-                return 'fas fa-landmark';
-            }
-            
-            if (categoryLower.includes('智慧办公')) {
-                if (nameLower.includes('会议')) return 'fas fa-video';
-                if (nameLower.includes('钉钉')) return 'fas fa-mobile-alt';
-                if (nameLower.includes('微信')) return 'fas fa-comments';
-                if (nameLower.includes('文档')) return 'fas fa-file-word';
-                if (nameLower.includes('wps') || nameLower.includes('云')) return 'fas fa-cloud';
-                return 'fas fa-laptop-house';
-            }
-            
-            if (categoryLower.includes('友情链接')) {
-                if (nameLower.includes('合作')) return 'fas fa-handshake';
-                if (nameLower.includes('资讯') || nameLower.includes('新闻')) return 'fas fa-newspaper';
-                if (nameLower.includes('论坛') || nameLower.includes('社区')) return 'fas fa-comments';
-                if (nameLower.includes('文档')) return 'fas fa-code';
-                if (nameLower.includes('服务')) return 'fas fa-headset';
-                return 'fas fa-link';
-            }
-            
-            return 'fas fa-globe';
-        }
-
-        // 添加网站
-        function addWebsite() {
-            const name = document.getElementById('site-name').value.trim();
-            const url = document.getElementById('site-url').value.trim();
-            const category = document.getElementById('site-category').value;
-            
-            if (!name || !url || !category) {
-                DataStorage.showNotification('请填写完整的网站信息', 'error');
-                return;
-            }
-            
-            // 验证URL格式
-            try {
-                new URL(url);
-            } catch (e) {
-                DataStorage.showNotification('请输入有效的网站地址', 'error');
-                return;
-            }
-            
-            // 检查是否已存在
-            if (websites.some(w => w.url.toLowerCase() === url.toLowerCase())) {
-                DataStorage.showNotification('该网站已存在', 'error');
-                return;
-            }
-            
-            // 创建新网站对象
-            const newWebsite = {
-                id: websites.length > 0 ? Math.max(...websites.map(w => w.id)) + 1 : 1,
-                name,
-                url,
-                category,
-                description: `办公网站：${name}`,
-                icon: getOfficeWebsiteIcon(name, category),
-                frequency: 1
-            };
-            
-            // 添加到数组
-            websites.push(newWebsite);
-            
-            // 更新分类计数
-            updateCategoryCounts();
-            
-            // 保存数据并刷新界面
-            DataStorage.saveWebsites();
-            loadCategories();
-            loadWebsites();
-            
-            // 清空表单
-            document.getElementById('site-name').value = '';
-            document.getElementById('site-url').value = '';
-            document.getElementById('site-category').selectedIndex = 0;
-            
-            DataStorage.showNotification(`已添加办公网站：${name}`);
-        }
-
-        // 搜索网站
-        function searchWebsites() {
-            searchQuery = document.getElementById('search-input').value.trim();
-            loadWebsites();
-        }
-
-        // 初始化事件监听器
-        function initEventListeners() {
-            // 添加网站
-            document.getElementById('add-site').addEventListener('click', addWebsite);
-            
-            // 搜索输入
-            document.getElementById('search-input').addEventListener('input', searchWebsites);
-            
-            // 搜索输入回车键
-            document.getElementById('search-input').addEventListener('keypress', (e) => {
-                if (e.key === 'Enter') {
-                    searchWebsites();
-                }
-            });
-            
-            // 添加网站表单回车键
-            document.getElementById('site-url').addEventListener('keypress', (e) => {
-                if (e.key === 'Enter') {
-                    e.preventDefault();
-                    addWebsite();
-                }
-            });
-        }
-
-        // 页面加载完成后初始化
-        document.addEventListener('DOMContentLoaded', init);
-    </script>
 </body>
 </html>
